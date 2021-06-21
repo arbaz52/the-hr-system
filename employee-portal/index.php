@@ -13,7 +13,7 @@
     <div class='container pt-4'>
         <h6>Time clocked in for today</h6>
         <p class='lead'>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Accusamus pariatur, minus porro velit deserunt totam.</p>
-        <div class='display-5 mb-3'>05h 25m</div>
+        <div id='clockedInForHowLongContainer' class='display-5 mb-3'>05h 25m</div>
         <div class='d-flex gap-2'>
             <button id="clockInButton" onclick="clockIn()" class='d-none btn btn-primary'>Clock In</button>
             <button id="clockOutButton" onclick="clockOut()" class='d-none btn btn-outline-primary'>Clock Out</button>
@@ -145,19 +145,31 @@
             })
         }).then(res => res.json()).then((res) => {
             console.debug(res)
-            if (res.info.employee) {
-                console.debug(clockInButton, clockOutButton)
+            if (!res.info.clockIn) {
+                clockOutButton.classList.add("d-none")
+                clockInButton.className = clockOutButton.className.replace(new RegExp("d-none", "gi"), "");
+                ("d-none")
+                clockedInForHowLongContainer.innerHTML = "Not yet clocked in!"
+            } else {
+                // determine how for how long the user has clocked in
+                console.debug(res);
+                const currentDate = new Date()
+                const clockInDate = new Date(parseInt(res.info.clockIn.clockIn) * 1000)
 
-                if (!res.info.clockIn) {
-                    clockOutButton.classList.add("d-none")
-                    clockInButton.className = clockOutButton.className.replace(new RegExp("d-none", "gi"), "");
-                    ("d-none")
-                } else {
-                    clockInButton.classList.add("d-none")
-                    clockOutButton.className = clockInButton.className.replace(new RegExp("d-none", "gi"), "");
-                    ("d-none")
+                const timeDiff = new Date(currentDate.valueOf() - clockInDate.valueOf())
+                timeDiff.setMinutes(timeDiff.getMinutes() + timeDiff.getTimezoneOffset())
+                const append0 = (str) => ('0' + str).slice(-2)
+                clockedInForHowLongContainer.innerHTML = `${append0(timeDiff.getHours())}h ${append0(timeDiff.getMinutes())}m`;
 
-                }
+
+
+
+
+
+                clockInButton.classList.add("d-none")
+                clockOutButton.className = clockInButton.className.replace(new RegExp("d-none", "gi"), "");
+                ("d-none")
+
             }
         })
     }
@@ -173,20 +185,31 @@
                 clockIn: (new Date()).valueOf() / 1000
             })
         }).then(res => res.json()).then((res) => {
-            console.debug(res)
-            if (res.info.employee) {
-                console.debug(clockInButton, clockOutButton)
+            if (!res.info.clockIn) {
+                clockOutButton.classList.add("d-none")
+                clockInButton.className = clockOutButton.className.replace(new RegExp("d-none", "gi"), "");
+                ("d-none")
+                clockedInForHowLongContainer.innerHTML = "Not yet clocked in!"
+            } else {
+                // determine how for how long the user has clocked in
+                console.debug(res);
+                const currentDate = new Date()
+                const clockInDate = new Date(parseInt(res.info.clockIn.clockIn) * 1000)
 
-                if (!res.info.clockIn) {
-                    clockOutButton.classList.add("d-none")
-                    clockInButton.className = clockOutButton.className.replace(new RegExp("d-none", "gi"), "");
-                    ("d-none")
-                } else {
-                    clockInButton.classList.add("d-none")
-                    clockOutButton.className = clockInButton.className.replace(new RegExp("d-none", "gi"), "");
-                    ("d-none")
+                const timeDiff = new Date(currentDate.valueOf() - clockInDate.valueOf())
+                timeDiff.setMinutes(timeDiff.getMinutes() + timeDiff.getTimezoneOffset())
+                const append0 = (str) => ('0' + str).slice(-2)
+                clockedInForHowLongContainer.innerHTML = `${append0(timeDiff.getHours())}h ${append0(timeDiff.getMinutes())}m`;
 
-                }
+
+
+
+
+
+                clockInButton.classList.add("d-none")
+                clockOutButton.className = clockInButton.className.replace(new RegExp("d-none", "gi"), "");
+                ("d-none")
+
             }
         })
     }
@@ -205,7 +228,23 @@
                     clockOutButton.classList.add("d-none")
                     clockInButton.className = clockOutButton.className.replace(new RegExp("d-none", "gi"), "");
                     ("d-none")
+                    clockedInForHowLongContainer.innerHTML = "Not yet clocked in!"
                 } else {
+                    // determine how for how long the user has clocked in
+                    console.debug(res);
+                    const currentDate = new Date()
+                    const clockInDate = new Date(parseInt(res.info.clockIn.clockIn) * 1000)
+
+                    const timeDiff = new Date(currentDate.valueOf() - clockInDate.valueOf())
+                    timeDiff.setMinutes(timeDiff.getMinutes() + timeDiff.getTimezoneOffset())
+                    const append0 = (str) => ('0' + str).slice(-2)
+                    clockedInForHowLongContainer.innerHTML = `${append0(timeDiff.getHours())}h ${append0(timeDiff.getMinutes())}m`;
+
+
+
+
+
+
                     clockInButton.classList.add("d-none")
                     clockOutButton.className = clockInButton.className.replace(new RegExp("d-none", "gi"), "");
                     ("d-none")
