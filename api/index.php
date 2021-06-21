@@ -249,6 +249,23 @@ if ($_SESSION && $_SESSION[$KEY_LOGIN_DETAILS]) {
     if ($result) {
         $response["info"]["company"] = mysqli_fetch_assoc($result);
     }
+
+
+    if ($_SESSION[$KEY_LOGIN_DETAILS][$KEY_TYPE] === $TYPE_EMPLOYEE) {
+        $employeeId = $_SESSION[$KEY_LOGIN_DETAILS][$KEY_ID];
+        $query = "SELECT id, firstName, lastName, email, salary FROM employee WHERE id=$employeeId";
+        $result = mysqli_query($connection, $query);
+        if ($result) {
+            $response["info"]["employee"] = mysqli_fetch_assoc($result);
+        }
+
+        //get current clockedin time
+        $query = "SELECT id, clockIn, clockOut from clockin WHERE employeeId=$employeeId AND clockOut is NULL ORDER BY id DESC LIMIT 1";
+        $result = mysqli_query($connection, $query);
+        if ($result && mysqli_num_rows($result) > 0) {
+            $response["info"]["clockIn"] = mysqli_fetch_assoc($result);
+        }
+    }
 }
 
 
