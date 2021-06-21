@@ -35,27 +35,7 @@
                         </tr>
                     </thead>
                     <tbody id='clockInsContainer'>
-                        <tr>
-                            <td>1</td>
-                            <td>1st Jun, 2021</td>
-                            <td>09:00 am</td>
-                            <td>14:00 pm</td>
-                            <td>05h 00m</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>1st Jun, 2021</td>
-                            <td>14:00 pm</td>
-                            <td>18:00 am</td>
-                            <td>04h 00m</td>
-                        </tr>
-                        <tr>
-                            <td>1</td>
-                            <td>2nd Jun, 2021</td>
-                            <td>09:00 am</td>
-                            <td>19:00 pm</td>
-                            <td>09h 00m</td>
-                        </tr>
+
                     </tbody>
                 </table>
             </div>
@@ -103,35 +83,72 @@
     <!-- Modal -->
     <div class="modal fade" id="modalRequestLeave" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <form class="modal-content" onsubmit="handleRequestLeave(event)">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Request a Leave</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form>
 
-                        <div class='form-group mb-3'>
-                            <label for='inputStartDate' class='mb-2'>From <span class='text-danger'>*</span>
-                            </label>
-                            <input type='date' required class='form-control' id='inputStartDate' name='inputStartDate' />
-                        </div>
+                    <div class='form-group mb-3'>
+                        <label for='inputStartDate' class='mb-2'>From <span class='text-danger'>*</span>
+                        </label>
+                        <input type='date' required class='form-control' id='inputStartDate' name='inputStartDate' />
+                    </div>
 
-                        <div class='form-group mb-3'>
-                            <label for='inputStartDate' class='mb-2'>To <span class='text-danger'>*</span>
-                            </label>
-                            <input type='date' required class='form-control' id='inputStartDate' name='inputStartDate' />
-                        </div>
-                    </form>
+                    <div class='form-group mb-3'>
+                        <label for='inputEndDate' class='mb-2'>To <span class='text-danger'>*</span>
+                        </label>
+                        <input type='date' required class='form-control' id='inputEndDate' name='inputEndDate' />
+                    </div>
+                    <div id="resultContainer"></div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Request</button>
+                    <button type="submit" class="btn btn-primary">Request</button>
                 </div>
-            </div>
+            </form>
         </div>
     </div>
 </body>
+<script>
+    function handleRequestLeave(event) {
+        event.preventDefault();
+
+        let fromDate = (new Date(inputStartDate.value)).valueOf() / 1000;
+        let toDate = (new Date(inputEndDate.value)).valueOf() / 1000;
+
+        let input = {
+            fromDate,
+            toDate
+        }
+
+        fetch("http://localhost/the-hr-system/api/?action=REQUEST_LEAVE", {
+            method: "POST",
+            body: JSON.stringify(input),
+            redirect: "error",
+            header: {
+                "Content-Type": "application/json",
+            },
+        }).then(res => res.json()).then((res) => {
+            console.debug(res)
+
+            inputStartDate.value = ""
+            inputEndDate.value = ""
+
+            if (res.error) {
+                resultContainer.innerHTML = `<div class='alert alert-danger'>${res.error}</div>`
+            } else if (res.success) {
+                setTimeout(() => {
+                    resultContainer.innerHTML = "";
+                    window.location.href = "./index.php";
+                }, 1500)
+                resultContainer.innerHTML = `<div class='alert alert-success'>${res.success}<br />Redirecting...</div>`
+            }
+        })
+    }
+</script>
+
 <script>
     function clockOut() {
         fetch("http://localhost/the-hr-system/api/?action=CLOCK_OUT", {
