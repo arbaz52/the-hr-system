@@ -26,11 +26,6 @@
                     </label>
                     <input type='email' required placeholder="Enter Email Address" class='form-control' id='inputEmail' name='email' />
                 </div>
-                <!-- <div class='form-group mb-3'>
-                    <label for='inputHiringDate' class='mb-2'>Hiring Date <span class='text-danger'>*</span>
-                    </label>
-                    <input type='date' required class='form-control' id='inputHiringDate' name='inputHiringDate' />
-                </div> -->
                 <div class='form-group mb-3'>
                     <label for='inputSalary' class='mb-2 d-block'>Salary <span class='text-danger'>*</span>
                         <div class="input-group mt-2">
