@@ -394,6 +394,27 @@
 <script>
     const append0 = (str) => ('0' + str).slice(-2)
 
+    function cancelRequest(leaveId) {
+        fetch("http://localhost/the-hr-system/api/?action=DELETE_LEAVE", {
+            method: "POST",
+            body: JSON.stringify({
+                leaveId
+            }),
+            redirect: "error",
+            header: {
+                "Content-Type": "application/json",
+            },
+        }).then(res => res.json()).then((res) => {
+            console.debug(res)
+            if (res.error) {
+                resultContainer.innerHTML = `<div class='alert alert-danger'>${res.error}</div>`
+            } else if (res.success) {
+                window.location.href = "./index.php";
+                resultContainer.innerHTML = `<div class='alert alert-success'>${res.success}<br />Redirecting...</div>`
+            }
+        })
+    }
+
     function fetchInfo() {
         fetch("http://localhost/the-hr-system/api/?action=CLOCK_INS", {
             redirect: "error",
@@ -418,7 +439,7 @@
                         
                         From <code>${fromDate}</code> to <code>${toDate}</code>
                         </div>
-                        <button class='btn btn-link btn-small text-secondary' style="font-size:12px">Cancel Request</button>
+                        <button class='btn btn-link btn-small text-secondary' style="font-size:12px" onclick="cancelRequest(${leave.id})">Cancel Request</button>
                         </div>
                         ${statusSpan}
                     </li>`
