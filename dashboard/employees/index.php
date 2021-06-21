@@ -20,11 +20,9 @@
                     <th>#</th>
                     <th>First Name</th>
                     <th>Last Name</th>
-                    <th>Hiring Date</th>
                     <th>Salary</th>
-                    <th>Actions</th>
                 </tr>
-            <tbody>
+            <tbody id="employeesContainer">
                 <tr>
                     <th scope="row">1</th>
                     <td><strong>Mark</strong></td>
@@ -52,5 +50,33 @@
 
     </div>
 </body>
+<script>
+    function fetchEmployees() {
+        fetch("http://localhost/the-hr-system/api/?action=EMPLOYEES", {
+
+        }).then(res => res.json()).then(res => {
+            const employees = res.data
+            console.debug(employeesContainer)
+            employeesContainer.innerHTML = ""
+            let rows = "";
+            const currencyFormatter = new Intl.NumberFormat("en-US", {
+                style: "currency",
+                currency: "USD"
+            })
+            for (let employee of employees) {
+                rows += `
+                    <tr>
+                        <th scope="row">${employee.id}</th>
+                        <td><strong>${employee.firstName}</strong></td>
+                        <td>${employee.lastName}</td>
+                        <td>${currencyFormatter.format(employee.salary)}</td>
+                    </tr>
+                `
+            }
+            employeesContainer.insertAdjacentHTML("beforeend", rows)
+        })
+    }
+    fetchEmployees()
+</script>
 
 </html>
