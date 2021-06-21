@@ -270,6 +270,16 @@ if ($_SESSION && $_SESSION[$KEY_LOGIN_DETAILS]) {
             $response["info"]["employee"] = mysqli_fetch_assoc($result);
         }
 
+
+        $result = mysqli_query($connection, "SELECT id, fromDate, toDate, status FROM leaverequest WHERE employeeId=$employeeId ORDER BY id DESC");
+        if ($result) {
+            $response["info"]["leaves"] = array();
+            while ($row = mysqli_fetch_assoc($result)) {
+                array_push($response["info"]["leaves"], $row);
+            }
+        }
+
+
         //get current clockedin time
         $query = "SELECT id, clockIn, clockOut from clockin WHERE employeeId=$employeeId AND clockOut is NULL ORDER BY id DESC LIMIT 1";
         $result = mysqli_query($connection, $query);

@@ -47,30 +47,7 @@
 
                 </h6>
                 <p class='lead'>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Accusamus pariatur, minus porro velit deserunt totam.</p>
-                <ul class="list-group">
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div class='d-flex align-items-center'>
-                            <div>
-
-                                From <code>21st May, 2021</code> to <code>16th June, 2021</code>
-                            </div>
-                            <button class='btn btn-link btn-small text-secondary' style="font-size:12px">Cancel Request</button>
-                        </div>
-                        <span class="badge bg-warning rounded-pill">pending</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>
-                            From <code>21st May, 2021</code> to <code>16th June, 2021</code>
-                        </div>
-                        <span class="badge bg-danger rounded-pill">rejected</span>
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div>
-                            From <code>21st May, 2021</code> to <code>16th June, 2021</code>
-                        </div>
-                        <span class="badge bg-success rounded-pill">approved</span>
-                    </li>
-                </ul>
+                <ul id="leavesContainer" class="list-group"></ul>
             </div>
         </div>
     </div>
@@ -424,6 +401,33 @@
                 "Content-Type": "application/json",
             },
         }).then(res => res.json()).then((res) => {
+
+            // populate my leave requests
+            if (res.info.leaves) {
+                let rows = "";
+                for (let leave of res.info.leaves) {
+                    const fromDate = (new Date(parseInt(leave.fromDate) * 1000)).format("jS M, o")
+                    const toDate = (new Date(parseInt(leave.toDate) * 1000)).format("jS M, o")
+                    let status = leave.status.toLowerCase();
+                    let statusColor = status === "pending" ? "warning" : status === "approved" ? "success" : "danger";
+                    let statusSpan = `<span class="badge bg-${statusColor} rounded-pill">${status}</span>`;
+                    const leaveTemplate = `
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div class='d-flex align-items-center'>
+                        <div>
+                        
+                        From <code>${fromDate}</code> to <code>${toDate}</code>
+                        </div>
+                        <button class='btn btn-link btn-small text-secondary' style="font-size:12px">Cancel Request</button>
+                        </div>
+                        ${statusSpan}
+                    </li>`
+                    rows += leaveTemplate
+                }
+
+                leavesContainer.insertAdjacentHTML("beforeend", rows)
+
+            }
 
             // this weeks clock ins
             let rows = "";
