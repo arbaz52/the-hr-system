@@ -241,6 +241,17 @@ if (!isset($_GET['action'])) {
 }
 
 
+if ($_SESSION && $_SESSION[$KEY_LOGIN_DETAILS]) {
+    $companyId = $_SESSION[$KEY_LOGIN_DETAILS][$KEY_COMPANY_ID];
+    $query = "SELECT id, name FROM company WHERE id=$companyId";
+    $result = mysqli_query($connection, $query);
+    $response["info"] = array();
+    if ($result) {
+        $response["info"]["company"] = mysqli_fetch_assoc($result);
+    }
+}
+
+
 
 
 print(json_encode($response));

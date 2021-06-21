@@ -6,7 +6,7 @@
     <div class='container pt-5'>
 
         <div class="jumbotron">
-            <h1 class="display-4">Welcome to {{CompanyName}}</h1>
+            <h1 class="display-4">Welcome to <span id="companyNameContainer"></span></h1>
             <p class="lead">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Asperiores odit suscipit neque distinctio eligendi exercitationem sequi aspernatur sed ipsa doloremque!</p>
 
         </div>
@@ -19,7 +19,7 @@
                         <h5 class="card-title d-flex justify-content-between">
 
                             <span>Organization's Employees</span>
-                            <span class="badge bg-secondary">242</span>
+                            <span id="totalEmployeesContainer" class="badge bg-secondary"></span>
                         </h5>
                         <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam, aliquid?</p>
                         <a href="./employees/add.php" class="btn btn-primary">Add a New Employee</a>
@@ -87,5 +87,20 @@
         </div>
     </div>
 </body>
+<script>
+    function fetchEmployees() {
+        fetch("http://localhost/the-hr-system/api/?action=EMPLOYEES", {
+
+        }).then(res => res.json()).then(res => {
+            const employees = res.data
+            totalEmployeesContainer.innerHTML = res.data.length
+
+            if (res.info.company) {
+                companyNameContainer.innerHTML = res.info.company.name;
+            }
+        })
+    }
+    fetchEmployees()
+</script>
 
 </html>
