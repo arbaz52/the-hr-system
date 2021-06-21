@@ -86,6 +86,16 @@ if (!isset($_GET['action'])) {
             };
             break;
 
+        case "LEAVES":
+            $companyId = $_SESSION[$KEY_LOGIN_DETAILS][$KEY_COMPANY_ID];
+            $response["data"] = array();
+
+            $result = mysqli_query($connection, "SELECT employee.id as employeeId, leaverequest.id as leaveId, firstName, lastName, fromDate, toDate, status FROM leaverequest JOIN employee ON leaverequest.employeeId=employee.id WHERE employee.companyId=$companyId");
+            if ($result)
+                while ($row = mysqli_fetch_assoc($result)) {
+                    array_push($response["data"], $row);
+                }
+            break;
 
 
         case "CLOCK_INS":
