@@ -15,8 +15,8 @@
         <p class='lead'>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Accusamus pariatur, minus porro velit deserunt totam.</p>
         <div class='display-5 mb-3'>05h 25m</div>
         <div class='d-flex gap-2'>
-            <button class='btn btn-primary'>Clock In</button>
-            <button class='btn btn-outline-primary'>Clock Out</button>
+            <button id="clockInButton" class='d-none btn btn-primary'>Clock In</button>
+            <button id="clockOutButton" class='d-none btn btn-outline-primary'>Clock Out</button>
             <button class='btn btn-link' data-bs-toggle="modal" data-bs-target="#modalRequestLeave">Request a Leave</button>
         </div>
 
@@ -132,5 +132,29 @@
         </div>
     </div>
 </body>
+<script>
+    function fetchInfo() {
+        fetch("http://localhost/the-hr-system/api/", {
+            redirect: "error",
+            header: {
+                "Content-Type": "application/json",
+            },
+        }).then(res => res.json()).then((res) => {
+            if (res.info.employee) {
+                console.debug(clockInButton, clockOutButton)
+                if (!res.info.employee.clockIn) {
+                    clockInButton.classList.remove("d-none")
+                    clockOutButton.replace(new RegExp("d-none", "gi"), "");("d-none")
+                } else {
+                    clockOutButton.classList.remove("d-none")
+                    clockInButton.replace(new RegExp("d-none", "gi"), "");("d-none")
+
+                }
+            }
+        })
+    }
+
+    fetchInfo()
+</script>
 
 </html>
