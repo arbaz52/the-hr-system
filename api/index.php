@@ -86,6 +86,19 @@ if (!isset($_GET['action'])) {
             };
             break;
 
+
+
+        case "CLOCK_INS":
+            $employeeId = $_SESSION[$KEY_LOGIN_DETAILS][$KEY_ID];
+            $response["data"] = array();
+
+            $result = mysqli_query($connection, "SELECT id, clockIn, clockOut FROM clockin WHERE employeeId=$employeeId ORDER BY id DESC");
+            if ($result)
+                while ($row = mysqli_fetch_assoc($result)) {
+                    array_push($response["data"], $row);
+                }
+            break;
+
         case "EMPLOYEES":
             $companyId = $_SESSION[$KEY_LOGIN_DETAILS][$KEY_COMPANY_ID];
             $response["data"] = array();
