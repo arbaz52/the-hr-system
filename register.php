@@ -7,9 +7,9 @@
 
         <div class='col-4 mx-auto'>
 
-            <form class='form'>
+            <form class='form' onsubmit="handleFormSubmission(event)">
 
-                <h1>Register  Organization</h1>
+                <h1>Register Organization</h1>
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi accusantium dolores dolorem. Earum repellendus omnis totam, accusamus ab voluptatem necessitatibus!</p>
                 <div class='form-group mb-3'>
                     <label for='inputCompanyName' class='mb-2'>Company Name <span class='text-danger'>*</span>
@@ -29,12 +29,49 @@
                 </div>
 
                 <div class='form-group mb-3'>
-                    <a href="./login.php" class='btn btn-primary'>Register Organization</a>
+                    <button class='btn btn-primary'>Register Organization</button>
                 </div>
+
+
+                <div id='resultContainer'></div>
 
             </form>
         </div>
     </div>
 </div>
+<script>
+    function handleFormSubmission(event) {
+        event.preventDefault();
+
+        let email = inputEmail.value;
+        let password = inputPassword.value;
+        let companyName = inputCompanyName.value;
+
+        let input = {
+            email,
+            password,
+            companyName,
+        }
+
+        fetch("http://localhost/the-hr-system/api/?action=CREATE_COMPANY", {
+            method: "POST",
+            body: JSON.stringify(input),
+            redirect: "error",
+            header: {
+                "Content-Type": "application/json",
+            },
+        }).then(res => res.json()).then((res) => {
+            console.debug(res)
+            if (res.error) {
+                resultContainer.innerHTML = `<div class='alert alert-error'>${res.error}</div>`
+            } else if (res.success) {
+                setTimeout(() => {
+                    window.location.href = "./login.php";
+                }, 500)
+                resultContainer.innerHTML = `<div class='alert alert-success'>${res.success}<br />Redirecting...</div>`
+            }
+        })
+    }
+</script>
 
 </html>
