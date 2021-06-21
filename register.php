@@ -14,7 +14,7 @@
                 <div class='form-group mb-3'>
                     <label for='inputCompanyName' class='mb-2'>Company Name <span class='text-danger'>*</span>
                     </label>
-                    <input type='text' required placeholder="Enter Company Name" class='form-control' id='inputCompanyName' name='email' />
+                    <input type='text' required placeholder="Enter Company Name" class='form-control' id='inputCompanyName' name='companyName' />
                 </div>
 
                 <div class='form-group mb-3'>
@@ -63,7 +63,7 @@
         }).then(res => res.json()).then((res) => {
             console.debug(res)
             if (res.error) {
-                resultContainer.innerHTML = `<div class='alert alert-error'>${res.error}</div>`
+                resultContainer.innerHTML = `<div class='alert alert-danger'>${res.error}</div>`
             } else if (res.success) {
                 setTimeout(() => {
                     window.location.href = "./login.php";

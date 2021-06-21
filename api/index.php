@@ -73,7 +73,7 @@ if (!isset($_GET['action'])) {
                 $row = mysqli_fetch_row($result);
                 $hrId = $row[0];
                 $companyId = $row[1];
-                $response["sucess"] = "Login successful";
+                $response["success"] = "Login successful";
                 if (isset($_SESSION))
                     session_destroy();
 
@@ -113,7 +113,7 @@ if (!isset($_GET['action'])) {
                     }
                 }
 
-                $response["sucess"] = "Login successful";
+                $response["success"] = "Login successful";
                 if (isset($_SESSION))
                     session_destroy();
 
