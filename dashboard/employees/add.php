@@ -7,7 +7,7 @@
 
         <div class='col-4 mx-auto'>
 
-            <form class='form'>
+            <form class='form' onsubmit="handleFormSubmission(event)">
 
                 <h1>Add Employee</h1>
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Commodi accusantium dolores dolorem. Earum repellendus omnis totam, accusamus ab voluptatem necessitatibus!</p>
@@ -26,22 +26,22 @@
                     </label>
                     <input type='email' required placeholder="Enter Email Address" class='form-control' id='inputEmail' name='email' />
                 </div>
-                <div class='form-group mb-3'>
+                <!-- <div class='form-group mb-3'>
                     <label for='inputHiringDate' class='mb-2'>Hiring Date <span class='text-danger'>*</span>
                     </label>
                     <input type='date' required class='form-control' id='inputHiringDate' name='inputHiringDate' />
-                </div>
+                </div> -->
                 <div class='form-group mb-3'>
                     <label for='inputSalary' class='mb-2 d-block'>Salary <span class='text-danger'>*</span>
-                    <div class="input-group mt-2">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">$</span>
+                        <div class="input-group mt-2">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">$</span>
+                            </div>
+                            <input type="number" required class="form-control" placeholder="Amount (to the nearest dollar)" id="inputSalary">
+                            <div class="input-group-append">
+                                <span class="input-group-text">.00</span>
+                            </div>
                         </div>
-                        <input type="number" required class="form-control" aria-label="Amount (to the nearest dollar)">
-                        <div class="input-group-append">
-                            <span class="input-group-text">.00</span>
-                        </div>
-                    </div>
 
                 </div>
 
@@ -49,9 +49,48 @@
                     <button class='btn btn-primary'>Add Employee</button>
                 </div>
 
+                <div id='resultContainer'></div>
+
             </form>
         </div>
     </div>
 </div>
+
+<script>
+    function handleFormSubmission(event) {
+        event.preventDefault();
+
+        let email = inputEmail.value;
+        let salary = inputSalary.value
+        let lastName = inputLastName.value;
+        let firstName = inputFirstName.value;
+
+        let input = {
+            email,
+            salary,
+            lastName,
+            firstName
+        }
+
+        fetch("http://localhost/the-hr-system/api/?action=ADD_EMPLOYEE", {
+            method: "POST",
+            body: JSON.stringify(input),
+            redirect: "error",
+            header: {
+                "Content-Type": "application/json",
+            },
+        }).then(res => res.json()).then((res) => {
+            console.debug(res)
+            if (res.error) {
+                resultContainer.innerHTML = `<div class='alert alert-danger'>${res.error}</div>`
+            } else if (res.success) {
+                setTimeout(() => {
+                    window.location.href = "../";
+                }, 500)
+                resultContainer.innerHTML = `<div class='alert alert-success'>${res.success}<br />Redirecting...</div>`
+            }
+        })
+    }
+</script>
 
 </html>
