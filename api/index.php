@@ -166,8 +166,7 @@ if (!isset($_GET['action'])) {
         case "CLOCK_IN":
             $clockIn = $input["clockIn"];
             $employeeId = $_SESSION[$KEY_LOGIN_DETAILS][$KEY_ID];
-            $result = mysqli_query($connection, "INSERT INTO clockin (employeeId, clockIn) VALUES ($employeeId, '$clockIn')");
-            echo "INSERT INTO clockin (employeeId, clockIn) VALUES ($employeeId, $clockIn)";
+            $result = mysqli_query($connection, "INSERT INTO clockin (employeeId, clockIn) VALUES ($employeeId, $clockIn)");
             if ($result) {
                 $response["success"] = "Clock in successful";
             } else {
@@ -182,9 +181,8 @@ if (!isset($_GET['action'])) {
             $result = mysqli_query($connection, "SELECT * FROM clockin WHERE employeeId=$employeeId AND clockout is NULL ORDER BY id DESC LIMIT 1");
             if ($result && mysqli_num_rows($result) > 0) {
                 $row = mysqli_fetch_row($result);
-                print_r($row);
                 $clockInId = $row[0];
-                $result = mysqli_query($connection, "UPDATE clockin SET clockOut='$clockOut' WHERE id=$clockInId");
+                $result = mysqli_query($connection, "UPDATE clockin SET clockOut=$clockOut WHERE id=$clockInId");
                 if ($result) {
                     $response["success"] = "Clock out successful";
                 } else {

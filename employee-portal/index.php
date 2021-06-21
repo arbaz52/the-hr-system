@@ -15,8 +15,8 @@
         <p class='lead'>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Accusamus pariatur, minus porro velit deserunt totam.</p>
         <div class='display-5 mb-3'>05h 25m</div>
         <div class='d-flex gap-2'>
-            <button id="clockInButton" class='d-none btn btn-primary'>Clock In</button>
-            <button id="clockOutButton" class='d-none btn btn-outline-primary'>Clock Out</button>
+            <button id="clockInButton" onclick="clockIn()" class='d-none btn btn-primary'>Clock In</button>
+            <button id="clockOutButton" onclick="clockOut()" class='d-none btn btn-outline-primary'>Clock Out</button>
             <button class='btn btn-link' data-bs-toggle="modal" data-bs-target="#modalRequestLeave">Request a Leave</button>
         </div>
 
@@ -133,6 +133,65 @@
     </div>
 </body>
 <script>
+    function clockOut() {
+        fetch("http://localhost/the-hr-system/api/?action=CLOCK_OUT", {
+            redirect: "error",
+            header: {
+                "Content-Type": "application/json",
+            },
+            method: "POST",
+            body: JSON.stringify({
+                clockOut: (new Date()).valueOf() / 1000
+            })
+        }).then(res => res.json()).then((res) => {
+            console.debug(res)
+            if (res.info.employee) {
+                console.debug(clockInButton, clockOutButton)
+
+                if (!res.info.clockIn) {
+                    clockOutButton.classList.add("d-none")
+                    clockInButton.className = clockOutButton.className.replace(new RegExp("d-none", "gi"), "");
+                    ("d-none")
+                } else {
+                    clockInButton.classList.add("d-none")
+                    clockOutButton.className = clockInButton.className.replace(new RegExp("d-none", "gi"), "");
+                    ("d-none")
+
+                }
+            }
+        })
+    }
+
+    function clockIn() {
+        fetch("http://localhost/the-hr-system/api/?action=CLOCK_IN", {
+            redirect: "error",
+            header: {
+                "Content-Type": "application/json",
+            },
+            method: "POST",
+            body: JSON.stringify({
+                clockIn: (new Date()).valueOf() / 1000
+            })
+        }).then(res => res.json()).then((res) => {
+            console.debug(res)
+            if (res.info.employee) {
+                console.debug(clockInButton, clockOutButton)
+
+                if (!res.info.clockIn) {
+                    clockOutButton.classList.add("d-none")
+                    clockInButton.className = clockOutButton.className.replace(new RegExp("d-none", "gi"), "");
+                    ("d-none")
+                } else {
+                    clockInButton.classList.add("d-none")
+                    clockOutButton.className = clockInButton.className.replace(new RegExp("d-none", "gi"), "");
+                    ("d-none")
+
+                }
+            }
+        })
+    }
+</script>
+<script>
     function fetchInfo() {
         fetch("http://localhost/the-hr-system/api/", {
             redirect: "error",
@@ -141,18 +200,24 @@
             },
         }).then(res => res.json()).then((res) => {
             if (res.info.employee) {
-                console.debug(clockInButton, clockOutButton)
-                if (!res.info.employee.clockIn) {
-                    clockInButton.classList.remove("d-none")
-                    clockOutButton.replace(new RegExp("d-none", "gi"), "");("d-none")
+
+                if (!res.info.clockIn) {
+                    clockOutButton.classList.add("d-none")
+                    clockInButton.className = clockOutButton.className.replace(new RegExp("d-none", "gi"), "");
+                    ("d-none")
                 } else {
-                    clockOutButton.classList.remove("d-none")
-                    clockInButton.replace(new RegExp("d-none", "gi"), "");("d-none")
+                    clockInButton.classList.add("d-none")
+                    clockOutButton.className = clockInButton.className.replace(new RegExp("d-none", "gi"), "");
+                    ("d-none")
 
                 }
+                console.debug(clockInButton, clockOutButton)
+
             }
         })
     }
+
+
 
     fetchInfo()
 </script>
